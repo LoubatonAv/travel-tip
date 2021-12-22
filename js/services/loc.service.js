@@ -1,0 +1,26 @@
+export const locService = {
+  getLocs,
+};
+
+import { utils } from './utils.js';
+
+const locs = [
+  { name: 'Greatplace', lat: 32.047104, lng: 34.832384 },
+  { name: 'Neveragain', lat: 32.047201, lng: 34.832581 },
+];
+
+setLoc();
+function setLoc(id, name) {
+  const loc = {
+    id: utils.makeId(),
+  };
+  console.log(loc);
+}
+
+function getLocs() {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      resolve(locs);
+    }, 2000);
+  });
+}
