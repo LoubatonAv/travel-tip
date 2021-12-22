@@ -3,9 +3,13 @@ export const mapService = {
   addMarker,
   panTo,
 };
+import { locService } from './loc.service.js';
+import { storageService } from './storage.service.js';
 
 var gMap;
-
+const MARKER_KEY = 'markersDB';
+let gMarkers = [];
+// storageService.load(MARKER_KEY) ||
 function initMap(lat = 32.0749831, lng = 34.9120554) {
   console.log('InitMap');
   return _connectGoogleApi().then(() => {
@@ -14,21 +18,27 @@ function initMap(lat = 32.0749831, lng = 34.9120554) {
       center: { lat, lng },
       zoom: 15,
     });
-    console.log('Map!', gMap);
-    gMap.addListener('click', (mapsMouseEvent) => {
-      // Close the current InfoWindow.
-      infoWindow.close();
+    gMarkers.forEach((marker) => {
+      addMarker(marker);
+    });
+    gMap.addListener('click', (event) => {
+      const place = prompt('Enter place name');
+      const newPlace = locService.setLoc(place);
+      const savedLocations = locService
+        .getLocs()
+        .then((res) => res.push(newPlace))
+        .then(renderPlaces);
 
-      // Create a new InfoWindow.
-      infoWindow = new google.maps.InfoWindow({
-        position: mapsMouseEvent.latLng,
-      });
-      infoWindow.setContent(
-        JSON.stringify(mapsMouseEvent.latLng.toJSON(), null, 2)
-      );
-      infoWindow.open(gMap);
+      addMarker(event.latLng);
+      const marker = event.latLng;
+      gMarkers.push(marker);
+      storageService.save(MARKER_KEY, gMarkers);
     });
   });
+}
+
+function renderPlaces(places) {
+  console.log('hi');
 }
 
 function addMarker(loc) {
@@ -37,6 +47,7 @@ function addMarker(loc) {
     map: gMap,
     title: 'Hello World!',
   });
+
   return marker;
 }
 
