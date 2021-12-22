@@ -2,6 +2,7 @@ export const mapService = {
   initMap,
   addMarker,
   panTo,
+  search
 };
 
 var gMap;
@@ -43,6 +44,7 @@ function addMarker(loc) {
 function panTo(lat, lng) {
   var laLatLng = new google.maps.LatLng(lat, lng);
   gMap.panTo(laLatLng);
+  addMarker({lat,lng});
 }
 
 function _connectGoogleApi() {
@@ -57,4 +59,15 @@ function _connectGoogleApi() {
     elGoogleApi.onload = resolve;
     elGoogleApi.onerror = () => reject('Google script failed to load');
   });
+}
+
+function search(address) {
+    return axios.get(`https://maps.googleapis.com/maps/api/geocode/json?address=${address}&key=AIzaSyC8CzUmPOZfq9TQFfsRlL9fLhWL2mmTIF8`)
+    .then(res => res.data.results[0].geometry.location)
+    .then(res => {
+        panTo(res.lat,res.lng);
+    });
+    
+
+    
 }
