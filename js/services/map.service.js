@@ -2,6 +2,7 @@ export const mapService = {
   initMap,
   addMarker,
   panTo,
+  remove,
 };
 
 import { locService } from './loc.service.js';
@@ -48,6 +49,24 @@ function addMarker(loc) {
   });
 
   return marker;
+}
+
+function remove(id) {
+  const getPlaceIdx = locService.getLocs().then((location) => {
+    location.findIndex(function (locationIdx) {
+      return id === locationIdx.id;
+    });
+    location.splice(getPlaceIdx, 1);
+    gMarkers.splice(getPlaceIdx, 1);
+  });
+
+  locService.getLocs().then((locs) => {
+    storageService.save(PLACE_KEY, locs);
+    storageService.save(MARKER_KEY, gMarkers);
+    initMap();
+  });
+
+  onGetLocs();
 }
 
 function panTo(lat, lng) {

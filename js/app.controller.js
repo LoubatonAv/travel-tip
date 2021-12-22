@@ -31,12 +31,14 @@ function onAddMarker() {
   mapService.addMarker({ lat: 32.0749831, lng: 34.9120554 });
 }
 
+function onRemove(id) {
+  mapService.remove(id);
+}
+
 function onGetLocs() {
   locService.getLocs().then((locs) => {
     console.log('Locations:', locs);
     const strHtmls = locs.map((place) => {
-      console.log('place:', place);
-
       return `<div>
       <p>${place.name}</p>
       <button onclick="onRemove('${place.id}')">Remove</button>
@@ -45,16 +47,6 @@ function onGetLocs() {
     });
     document.querySelector('.locs').innerHTML = strHtmls.join('');
   });
-}
-
-function onRemove(id) {
-  const getPlaceIdx = locService.getLocs().then((location) => {
-    location.findIndex(function (locationIdx) {
-      return id === locationIdx.id;
-    });
-    location.splice(getPlaceIdx, 1);
-  });
-  onGetLocs();
 }
 
 function onGetUserPos() {
@@ -70,6 +62,7 @@ function onGetUserPos() {
       console.log('err!!!', err);
     });
 }
+
 function onPanTo(lat, lng) {
   console.log('Panning the Map');
   mapService.panTo(lat, lng);
