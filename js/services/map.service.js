@@ -3,13 +3,17 @@ export const mapService = {
   addMarker,
   panTo,
 };
+
 import { locService } from './loc.service.js';
 import { storageService } from './storage.service.js';
 
-var gMap;
 const MARKER_KEY = 'markersDB';
-let gMarkers = [];
-// storageService.load(MARKER_KEY) ||
+const PLACE_KEY = 'placesDB';
+
+let gMarkers = storageService.load(MARKER_KEY) || [];
+
+var gMap;
+
 function initMap(lat = 32.0749831, lng = 34.9120554) {
   console.log('InitMap');
   return _connectGoogleApi().then(() => {
@@ -23,22 +27,17 @@ function initMap(lat = 32.0749831, lng = 34.9120554) {
     });
     gMap.addListener('click', (event) => {
       const place = prompt('Enter place name');
-      const newPlace = locService.setLoc(place);
-      const savedLocations = locService
-        .getLocs()
-        .then((res) => res.push(newPlace))
-        .then(renderPlaces);
-
+      locService.getLocs().then(locService.setLoc(place, event.latLng));
+      locService.getLocs().then((locs) => {
+        storageService.save(PLACE_KEY, locs);
+      });
       addMarker(event.latLng);
       const marker = event.latLng;
+
       gMarkers.push(marker);
       storageService.save(MARKER_KEY, gMarkers);
     });
   });
-}
-
-function renderPlaces(places) {
-  console.log('hi');
 }
 
 function addMarker(loc) {
@@ -53,6 +52,8 @@ function addMarker(loc) {
 
 function panTo(lat, lng) {
   var laLatLng = new google.maps.LatLng(lat, lng);
+  console.log('lat,lng:', lat, lng);
+
   gMap.panTo(laLatLng);
 }
 

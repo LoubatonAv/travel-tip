@@ -4,17 +4,17 @@ export const locService = {
 };
 
 import { utils } from './utils.js';
+import { storageService } from './storage.service.js';
 
-const locs = [
-  { name: 'Greatplace', lat: 32.047104, lng: 34.832384 },
-  { name: 'Neveragain', lat: 32.047201, lng: 34.832581 },
-];
+const locs = storageService.load('placesDB') || [];
 
-function setLoc(name) {
+function setLoc(name, latlng) {
   const loc = {
     name,
+    latlng,
+    id: utils.makeId(),
   };
-  console.log(loc);
+  locs.push(loc);
 }
 
 function getLocs() {

@@ -6,6 +6,8 @@ window.onAddMarker = onAddMarker;
 window.onPanTo = onPanTo;
 window.onGetLocs = onGetLocs;
 window.onGetUserPos = onGetUserPos;
+window.onSearch = onSearch;
+window.onRemove = onRemove;
 
 function onInit() {
   mapService
@@ -32,8 +34,27 @@ function onAddMarker() {
 function onGetLocs() {
   locService.getLocs().then((locs) => {
     console.log('Locations:', locs);
-    document.querySelector('.locs').innerText = JSON.stringify(locs);
+    const strHtmls = locs.map((place) => {
+      console.log('place:', place);
+
+      return `<div>
+      <p>${place.name}</p>
+      <button onclick="onRemove('${place.id}')">Remove</button>
+      <button onclick="onPanTo('${place.latlng.lat}','${place.latlng.lng}')">Go to</button>
+      </div>`;
+    });
+    document.querySelector('.locs').innerHTML = strHtmls.join('');
   });
+}
+
+function onRemove(id) {
+  const getPlaceIdx = locService.getLocs().then((location) => {
+    location.findIndex(function (locationIdx) {
+      return id === locationIdx.id;
+    });
+    location.splice(getPlaceIdx, 1);
+  });
+  onGetLocs();
 }
 
 function onGetUserPos() {
@@ -43,12 +64,17 @@ function onGetUserPos() {
       document.querySelector(
         '.user-pos'
       ).innerText = `Latitude: ${pos.coords.latitude} - Longitude: ${pos.coords.longitude}`;
+      mapService.panTo(pos.coords.latitude, pos.coords.longitude);
     })
     .catch((err) => {
       console.log('err!!!', err);
     });
 }
-function onPanTo() {
+function onPanTo(lat, lng) {
   console.log('Panning the Map');
-  mapService.panTo(35.6895, 139.6917);
+  mapService.panTo(lat, lng);
+}
+
+function onSearch(el) {
+  mapService.search(el.value);
 }
