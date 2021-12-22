@@ -9,13 +9,12 @@ const locs = [
   { name: 'Neveragain', lat: 32.047201, lng: 34.832581 },
 ];
 
-setLoc();
-function setLoc(id, name) {
-  const loc = {
-    id: utils.makeId(),
-  };
-  console.log(loc);
-}
+// function setLoc(name) {
+//   const loc = {
+//     id: utils.makeId(),
+//   };
+//   console.log(loc);
+// }
 
 function getLocs() {
   return new Promise((resolve, reject) => {
