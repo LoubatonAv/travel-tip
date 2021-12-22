@@ -1,6 +1,7 @@
 body{
     text-align: center;
     margin: 0;
+    background-color: whitesmoke;
 }
 
 header{
@@ -31,4 +32,49 @@ header{
 
 .button-container button:hover{
     box-shadow: 0px 5px 7px 5px rgba(0, 0, 0, 0.336);
+}
+
+p {
+    font-size: 1.2rem;
+    font-weight: 600;
+    text-decoration: underline;
+}
+
+.user-pos{
+    font-weight: 500;
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    /* justify-content: center; */
+    /* align-items: center; */
+    color:rgb(54, 54, 54) ;
+
+}
+
+.locs {
+    display: grid;
+    grid-template-columns: repeat(auto-fill,200px);
+    grid-auto-rows: 100px;
+    font-size: 1.2rem;
+    gap: 10px;
+    justify-content: center;
+    align-content: center;
+    width: 100vw;
+
+}
+
+.locs div{
+    background-color:rgb(54, 54, 54) ;
+    color: white;
+    border-radius: 5px;
+    margin-top: 10px;
+}
+
+.locs div button{
+    border: none;
+    cursor: pointer;
+    background-color:rgb(125, 196, 172) ;
+    color: rgb(54, 54, 54);
+    font-weight: 600;
+    border-radius: 5px;
 }
