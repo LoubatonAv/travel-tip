@@ -29,15 +29,19 @@ function initMap(lat = 32.0749831, lng = 34.9120554) {
     });
     gMap.addListener('click', (event) => {
       const place = prompt('Enter place name');
-      locService.getLocs().then(locService.setLoc(place, event.latLng));
-      locService.getLocs().then((locs) => {
-        storageService.save(PLACE_KEY, locs);
-      });
-      addMarker(event.latLng);
-      const marker = event.latLng;
+      if (!place) {
+        alert('Please enter a valid input');
+      } else {
+        locService.getLocs().then(locService.setLoc(place, event.latLng));
+        locService.getLocs().then((locs) => {
+          storageService.save(PLACE_KEY, locs);
+        });
+        addMarker(event.latLng);
+        const marker = event.latLng;
 
-      gMarkers.push(marker);
-      storageService.save(MARKER_KEY, gMarkers);
+        gMarkers.push(marker);
+        storageService.save(MARKER_KEY, gMarkers);
+      }
     });
   });
 }
