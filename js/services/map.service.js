@@ -78,7 +78,7 @@ function panTo(lat, lng) {
 
 function _connectGoogleApi() {
   if (window.google) return Promise.resolve();
-  const API_KEY = 'AIzaSyBs6tCD8NczXXKGpsVbHPuzCmTuymcyiJA';
+  const API_KEY = '';
   var elGoogleApi = document.createElement('script');
   elGoogleApi.src = `https://maps.googleapis.com/maps/api/js?key=${API_KEY}`;
   elGoogleApi.async = true;
@@ -93,7 +93,7 @@ function _connectGoogleApi() {
 function search(address) {
   return axios
     .get(
-      `https://maps.googleapis.com/maps/api/geocode/json?address=${address}&key=AIzaSyC8CzUmPOZfq9TQFfsRlL9fLhWL2mmTIF8`
+      `https://maps.googleapis.com/maps/api/geocode/json?address=${address}&key=${geoKey}`
     )
     .then((res) => res.data.results[0].geometry.location)
     .then((res) => {
